@@ -3,10 +3,70 @@
 <%@ page isELIgnored="false" %>
 <jsp:include page="/WEB-INF/jsp/layout/header.jsp" />
 
+<style>
+    /* Dark glassmorphism card */
+    .glass-card {
+        background: rgba(20, 20, 20, 0.7); /* nền tối, mờ 70% */
+        backdrop-filter: blur(12px);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1); /* viền mờ sáng */
+        color: #f0f0f0; /* chữ sáng nổi trên nền tối */
+    }
+
+    .glass-card .form-control,
+    .glass-card .form-select,
+    .glass-card textarea {
+        background: rgba(50, 50, 50, 0.6); /* input nền tối trong suốt */
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #f0f0f0;
+        backdrop-filter: blur(5px);
+    }
+
+    .glass-card .form-control:focus,
+    .glass-card .form-select:focus,
+    .glass-card textarea:focus {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .glass-card .btn-success {
+        background: rgba(0, 128, 0, 0.7);
+        border: none;
+        color: white;
+        backdrop-filter: blur(5px);
+    }
+
+    .glass-card .btn-success:hover {
+        background: rgba(0, 128, 0, 0.9);
+    }
+
+    .glass-card .alert {
+        background: rgba(255, 0, 0, 0.3);
+        color: #ffcccc;
+        border: 1px solid rgba(255, 0, 0, 0.2);
+    }
+
+    /* Dark glass footer */
+    footer.glass-footer {
+        background: rgba(30, 30, 30, 0.7);
+        backdrop-filter: blur(10px);
+        color: #f0f0f0;
+    }
+
+    footer.glass-footer a {
+        color: #d0d0d0;
+    }
+
+    footer.glass-footer a:hover {
+        color: #ffffff;
+        text-decoration: none;
+    }
+</style>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow-sm p-4">
+            <div class="card shadow-sm p-4 glass-card">
                 <h3 class="card-title text-center mb-4">
                     <c:choose>
                         <c:when test="${not empty drink.id}">Cập nhật thức uống</c:when>
@@ -15,7 +75,7 @@
                 </h3>
 
                 <c:if test="${not empty error}">
-                    <div class="alert alert-danger">${error}</div>
+                    <div class="alert">${error}</div>
                 </c:if>
 
                 <form action="${pageContext.request.contextPath}/manager/drink/${not empty drink.id ? 'edit' : 'create'}" method="post" enctype="multipart/form-data">
@@ -77,16 +137,5 @@
     </div>
 </div>
 
-<script>
-    function previewImage(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const output = document.getElementById('preview');
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-</script>
 
 <jsp:include page="/WEB-INF/jsp/layout/footer.jsp" />
