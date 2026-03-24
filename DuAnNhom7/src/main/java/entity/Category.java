@@ -1,24 +1,70 @@
 package entity;
 
+import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "Categories")
 public class Category {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "name", columnDefinition = "NVARCHAR(100)", nullable = false)
     private String name;
+
+    @Column(name = "description", columnDefinition = "NVARCHAR(255)")
+    private String description;
+
+    @Column(name = "active", nullable = false)
     private boolean active;
 
-    public Category() {}
+    // 1 Category - N Drinks
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    private List<Drink> drinks;
 
-    public Category(int id, String name, boolean active) {
+    public Category() {
+    }
+
+    // Getter & Setter
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
         this.active = active;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public List<Drink> getDrinks() {
+        return drinks;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
+    public void setDrinks(List<Drink> drinks) {
+        this.drinks = drinks;
+    }
 }

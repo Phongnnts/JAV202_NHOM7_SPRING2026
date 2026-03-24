@@ -1,34 +1,72 @@
 package entity;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Bill_Details")
 public class BillDetail {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "quantity", nullable = false)
     private int quantity;
+
+    @Column(name = "price", nullable = false)
     private int price;
-    private int billId;
-    private int drinkId;
 
-    public BillDetail() {}
+    // MANY BillDetails - ONE Bill
+    @ManyToOne
+    @JoinColumn(name = "bill_id", nullable = false)
+    private Bill bill;
 
-    public BillDetail(int id, int quantity, int price, int billId, int drinkId) {
-        this.id = id;
-        this.quantity = quantity;
-        this.price = price;
-        this.billId = billId;
-        this.drinkId = drinkId;
+    // MANY BillDetails - ONE Drink
+    @ManyToOne
+    @JoinColumn(name = "drink_id", nullable = false)
+    private Drink drink;
+
+    public BillDetail() {
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Getter & Setter
+    public Integer getId() {
+        return id;
+    }
 
-    public int getQuantity() { return quantity; }
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public int getPrice() { return price; }
-    public void setPrice(int price) { this.price = price; }
+    public int getQuantity() {
+        return quantity;
+    }
 
-    public int getBillId() { return billId; }
-    public void setBillId(int billId) { this.billId = billId; }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
-    public int getDrinkId() { return drinkId; }
-    public void setDrinkId(int drinkId) { this.drinkId = drinkId; }
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public Bill getBill() {
+        return bill;
+    }
+
+    public void setBill(Bill bill) {
+        this.bill = bill;
+    }
+
+    public Drink getDrink() {
+        return drink;
+    }
+
+    public void setDrink(Drink drink) {
+        this.drink = drink;
+    }
 }
