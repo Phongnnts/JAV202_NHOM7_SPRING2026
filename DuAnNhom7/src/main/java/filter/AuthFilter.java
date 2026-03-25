@@ -1,5 +1,6 @@
 package filter;
 
+import entity.User;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.*;
@@ -19,29 +20,43 @@ public class AuthFilter implements Filter {
 
         String uri = request.getRequestURI();
         String contextPath = request.getContextPath();
+        String path = uri.substring(contextPath.length());
 
-        // Các đường dẫn được phép truy cập không cần login
-        if (uri.contains("login") || uri.contains("logout") || uri.contains("css") || uri.contains("js")) {
+        // Các đường dẫn công khai (không cần login)
+        if (path.startsWith("/auth/login") ||
+                path.startsWith("/css") ||
+                path.startsWith("/js") ||
+                path.startsWith("/images") ||
+                path.equals("/logout")) {
             chain.doFilter(request, response);
             return;
         }
 
         HttpSession session = request.getSession(false);
 
-        // Chưa login
+        // Chưa login -> chuyển về login
         if (session == null || !AuthUtil.isLogin(session)) {
             response.sendRedirect(contextPath + "/auth/login");
             return;
         }
 
-        // Phân quyền
-        if (uri.contains("/admin") && !AuthUtil.isAdmin(session)) {
-            response.sendRedirect(contextPath + "/admin/home");
+        User currentUser = AuthUtil.getUser(session);
+
+        // Admin có thể truy cập mọi nơi
+        if (AuthUtil.isAdmin(session)) {
+            chain.doFilter(request, response);
             return;
         }
 
-        if (uri.contains("/employee") && AuthUtil.isAdmin(session)) {
-            response.sendRedirect(contextPath + "/admin/home");
+        // User (không phải admin) không được truy cập /admin/*
+        if (path.startsWith("/admin/")) {
+            response.sendRedirect(contextPath + "/home");
+            return;
+        }
+
+        // User không được truy cập /manager/*
+        if (path.startsWith("/manager/")) {
+            response.sendRedirect(contextPath + "/home");
             return;
         }
 

@@ -26,7 +26,7 @@
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/home">Trang Chủ</a></li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/drink/index">Category</a></li>
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/drink/index">Category </a></li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index">Drink</a></li>
                  <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index">Giỏ hàng</a></li>
                   <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index">Về chúng tôi</a></li>
