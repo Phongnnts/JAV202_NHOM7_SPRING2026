@@ -147,7 +147,7 @@
 <!-- SEARCH -->
 <div class="container">
     <div class="search-box">
-        <form action="${pageContext.request.contextPath}/home" method="get"
+              <form action="${pageContext.request.contextPath}/admin/home" method="get"
               class="d-flex align-items-center gap-3 search-flex">
 
             <div class="search-wrapper flex-grow-1">
@@ -176,7 +176,7 @@
 </div>
 
 <!-- PRODUCT -->
-<div class="container mt-5">
+<div class="container mt-5 " ">
     <div class="row g-4">
         <c:forEach var="d" items="${drinks}">
             <div class="col-md-6 col-lg-3">
@@ -187,13 +187,18 @@
                     <div class="p-3">
                         <h5 class="product-title">${d.name}</h5>
                         <small class="text-muted">Danh mục:${d.category.name}</small>
-                        <div class="d-flex justify-content-between align-items-center mt-2">
-                            <span class="product-price">${d.price} VND</span>
-                            <a href="${pageContext.request.contextPath}/home/detail?id=${d.id}"
-                               class="btn btn-sm btn-outline-dark">
-                                View
-                            </a>
-                        </div>
+                       <div class="d-flex justify-content-between align-items-center mt-2">
+                           <span class="product-price">${d.price} VND</span>
+
+                           <div>
+                               <a href="${pageContext.request.contextPath}/admin/drink/list"
+                                  class="btn btn-sm btn-warning">
+                                 Xem Chi Tiết
+                               </a>
+
+
+                           </div>
+                       </div>
                     </div>
                 </div>
             </div>

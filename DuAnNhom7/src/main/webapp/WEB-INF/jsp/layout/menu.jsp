@@ -26,17 +26,16 @@
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/admin/home">Trang Chủ</a></li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/drink/index">Category</a></li>
-                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index">Drink</a></li>
-                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index">Giỏ hàng</a></li>
-                  <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index">Về chúng tôi</a></li>
-                   <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index">Liên hệ</a></li>
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/drink/index"> Quản Lí Đồ Uống </a></li>
+                <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index"> Quản Lí Kho</a></li>
+                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index">Quản Lí Nhân Viên</a></li>
+                  <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/manager/category/index"> Báo Cáo Vận Hàng</a></li>
 
 
             </ul>
             <ul class="navbar-nav ms-auto">
                 <c:if test="${not empty sessionScope.user}">
-                    <li class="nav-item"><a class="nav-link" href="#">Xin Chào đây là role : ${sessionScope.user.fullName}</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Role : ${sessionScope.user.fullName}</a></li>
                     <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/auth/login">Logout</a></li>
                 </c:if>
                 <c:if test="${empty sessionScope.user}">

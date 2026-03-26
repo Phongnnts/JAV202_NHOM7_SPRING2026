@@ -1,0 +1,60 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<jsp:include page="/WEB-INF/jsp/layout/header.jsp" />
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Xác nhận đơn hàng</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Thông tin khách hàng</h5>
+                    <p><strong>Họ tên:</strong> ${sessionScope.user.fullName}</p>
+                    <p><strong>Email:</strong> ${sessionScope.user.email}</p>
+                    <p><strong>Số điện thoại:</strong> ${sessionScope.user.phone}</p>
+
+                    <hr>
+
+                    <h5>Chi tiết đơn hàng</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Đơn giá</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="entry" items="${cart}">
+                                <tr>
+                                    <td>${entry.value.drink.name}</td>
+                                    <td>${entry.value.quantity}</td>
+                                    <td>${entry.value.drink.price} VND</td>
+                                    <td>${entry.value.subtotal} VND</td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-info">
+                                <td colspan="3" class="text-end fw-bold">Tổng cộng:</td>
+                                <td class="fw-bold text-danger">${total} VND</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <form action="${pageContext.request.contextPath}/checkout" method="post">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg">Xác nhận thanh toán</button>
+                            <a href="${pageContext.request.contextPath}/cart" class="btn btn-secondary">Quay lại giỏ hàng</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<jsp:include page="/WEB-INF/jsp/layout/footer.jsp" />

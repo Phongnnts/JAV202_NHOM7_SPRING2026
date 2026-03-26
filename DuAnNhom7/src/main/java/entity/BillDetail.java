@@ -3,7 +3,7 @@ package entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Bill_Details")
+@Table(name = "BillDetails")  // Không có dấu gạch ngang
 public class BillDetail {
 
     @Id
@@ -16,57 +16,29 @@ public class BillDetail {
     @Column(name = "price", nullable = false)
     private int price;
 
-    // MANY BillDetails - ONE Bill
     @ManyToOne
     @JoinColumn(name = "bill_id", nullable = false)
     private Bill bill;
 
-    // MANY BillDetails - ONE Drink
     @ManyToOne
     @JoinColumn(name = "drink_id", nullable = false)
     private Drink drink;
 
-    public BillDetail() {
-    }
+    public BillDetail() {}
 
-    // Getter & Setter
-    public Integer getId() {
-        return id;
-    }
+    // Getters & Setters
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public int getQuantity() {
-        return quantity;
-    }
+    public int getPrice() { return price; }
+    public void setPrice(int price) { this.price = price; }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+    public Bill getBill() { return bill; }
+    public void setBill(Bill bill) { this.bill = bill; }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public Bill getBill() {
-        return bill;
-    }
-
-    public void setBill(Bill bill) {
-        this.bill = bill;
-    }
-
-    public Drink getDrink() {
-        return drink;
-    }
-
-    public void setDrink(Drink drink) {
-        this.drink = drink;
-    }
+    public Drink getDrink() { return drink; }
+    public void setDrink(Drink drink) { this.drink = drink; }
 }

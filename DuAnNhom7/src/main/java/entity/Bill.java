@@ -12,85 +12,50 @@ public class Bill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "code", length = 10, nullable = false, unique = true)
+    @Column(name = "code", length = 20, nullable = false, unique = true)
     private String code;
 
     @Column(name = "created_at")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @Column(name = "total", nullable = false)
     private int total;
 
-    @Column(name = "status", columnDefinition = "NVARCHAR(20)", nullable = false)
-    private String status;
+    @Column(name = "status", nullable = false)
+    private String status;  // Dùng String thay vì BillStatus enum
 
-    // MANY Bills - ONE User
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // 1 Bill - N BillDetails
-    @OneToMany(mappedBy = "bill", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bill", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BillDetail> billDetails;
 
     public Bill() {
+        this.createdAt = new Date();
+        this.status = "NEW";
     }
 
-    // Getter & Setter
-    public Integer getId() {
-        return id;
-    }
+    // Getters & Setters
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public String getCode() { return code; }
+    public void setCode(String code) { this.code = code; }
 
-    public String getCode() {
-        return code;
-    }
+    public Date getCreatedAt() { return createdAt; }
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+    public int getTotal() { return total; }
+    public void setTotal(int total) { this.total = total; }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<BillDetail> getBillDetails() {
-        return billDetails;
-    }
-
-    public void setBillDetails(List<BillDetail> billDetails) {
-        this.billDetails = billDetails;
-    }
+    public List<BillDetail> getBillDetails() { return billDetails; }
+    public void setBillDetails(List<BillDetail> billDetails) { this.billDetails = billDetails; }
 }

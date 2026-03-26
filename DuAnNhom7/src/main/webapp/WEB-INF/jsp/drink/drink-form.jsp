@@ -1,92 +1,101 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ page isELIgnored="false" %>
+
 <jsp:include page="/WEB-INF/jsp/layout/header.jsp" />
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm p-4">
-                <h3 class="card-title text-center mb-4">
-                    <c:choose>
-                        <c:when test="${not empty drink.id}">Cập nhật thức uống</c:when>
-                        <c:otherwise>Thêm mới thức uống</c:otherwise>
-                    </c:choose>
-                </h3>
+    <div class="card shadow-lg rounded-4 border-0">
+        <div class="card-header bg-primary text-white rounded-top-4">
+            <h4 class="mb-0">
+                ${drink != null ? "Cập nhật đồ uống" : "Thêm đồ uống"}
+            </h4>
+        </div>
 
-                <c:if test="${not empty error}">
-                    <div class="alert alert-danger">${error}</div>
-                </c:if>
+        <div class="card-body p-4">
 
-                <form action="${pageContext.request.contextPath}/manager/drink/${not empty drink.id ? 'edit' : 'create'}" method="post" enctype="multipart/form-data">
-                    <c:if test="${not empty drink.id}">
-                        <input type="hidden" name="id" value="${drink.id}">
+            <form method="post" enctype="multipart/form-data"
+                  action="${pageContext.request.contextPath}/admin/drink/${drink != null ? 'edit' : 'create'}">
+
+                <input type="hidden" name="id" value="${drink.id}"/>
+
+                <!-- Name -->
+                <div class="mb-3">
+                    <label class="form-label">Tên</label>
+                    <input type="text" name="name" class="form-control"
+                           value="${drink.name}" required>
+                </div>
+
+                <!-- Price -->
+                <div class="mb-3">
+                    <label class="form-label">Giá</label>
+                    <input type="number" name="price" class="form-control"
+                           value="${drink.price}" required>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="mb-3">
+                    <label class="form-label">Hình ảnh</label>
+                    <input type="file" name="imageFile" class="form-control" accept="image/*" 
+                           ${drink == null ? 'required' : ''}>
+                    <small class="text-muted">Chọn file ảnh (JPG, PNG, GIF)</small>
+                    
+                    <!-- Preview ảnh cũ khi edit -->
+                    <c:if test="${drink != null && not empty drink.image}">
+                        <div class="mt-2">
+                            <label class="form-label">Ảnh hiện tại:</label>
+                            <div>
+                                <img src="${pageContext.request.contextPath}/assets/uploads/${drink.image}"
+                                     style="max-height: 150px; border-radius: 8px;"
+                                     alt="${drink.name}">
+                                <input type="hidden" name="oldImage" value="${drink.image}">
+                            </div>
+                        </div>
                     </c:if>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Tên thức uống <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="name" name="name" required value="${drink.name}">
-                    </div>
+                <!-- Description -->
+                <div class="mb-3">
+                    <label class="form-label">Mô tả</label>
+                    <textarea name="description" class="form-control" rows="3">${drink.description}</textarea>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="price" class="form-label">Giá <span class="text-danger">*</span></label>
-                        <input type="number" class="form-control" id="price" name="price" required min="0" step="1000" value="${drink.price}">
-                    </div>
+                <!-- Category -->
+                <div class="mb-3">
+                    <label class="form-label">Danh mục</label>
+                    <select name="categoryId" class="form-select" required>
+                        <option value="">-- Chọn danh mục --</option>
+                        <c:forEach var="c" items="${categories}">
+                            <option value="${c.id}"
+                                ${drink != null && drink.category.id == c.id ? "selected" : ""}>
+                                ${c.name}
+                            </option>
+                        </c:forEach>
+                    </select>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Danh mục <span class="text-danger">*</span></label>
-                        <select class="form-select" id="category" name="categoryId" required>
-                            <c:forEach var="c" items="${categories}">
-                                <option value="${c.id}" <c:if test="${drink.category.id == c.id}">selected</c:if>>${c.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
+                <!-- Active -->
+                <div class="form-check mb-3">
+                    <input type="checkbox" name="active" class="form-check-input" value="true"
+                        ${drink != null && drink.active ? "checked" : ""}>
+                    <label class="form-check-label">Hoạt động</label>
+                </div>
 
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Mô tả</label>
-                        <textarea class="form-control" id="description" name="description" rows="3">${drink.description}</textarea>
-                    </div>
+                <!-- Buttons -->
+                <div class="d-flex justify-content-between">
+                    <a href="${pageContext.request.contextPath}/admin/drink/list"
+                       class="btn btn-secondary">Quay lại</a>
 
-                    <div class="mb-3">
-                        <label for="image" class="form-label">Ảnh</label>
-                        <input type="file" class="form-control" id="image" name="image" accept="image/*" onchange="previewImage(event)">
-                        <c:if test="${not empty drink.image}">
-                            <img id="preview" src="${pageContext.request.contextPath}/assets/uploads/${drink.image}" class="img-thumbnail mt-2" width="150">
-                        </c:if>
-                        <c:if test="${empty drink.image}">
-                            <img id="preview" class="img-thumbnail mt-2" width="150" style="display: none;">
-                        </c:if>
-                    </div>
+                    <button type="submit" class="btn btn-success">
+                        ${drink != null ? "Cập nhật" : "Thêm mới"}
+                    </button>
+                </div>
 
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="active" name="active" <c:if test="${drink.active}">checked</c:if>>
-                        <label class="form-check-label" for="active">Hoạt động</label>
-                    </div>
+            </form>
 
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-success">
-                            <c:choose>
-                                <c:when test="${not empty drink.id}">Cập nhật</c:when>
-                                <c:otherwise>Thêm mới</c:otherwise>
-                            </c:choose>
-                        </button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 </div>
-
-<script>
-    function previewImage(event) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            const output = document.getElementById('preview');
-            output.src = reader.result;
-            output.style.display = 'block';
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-</script>
 
 <jsp:include page="/WEB-INF/jsp/layout/footer.jsp" />
